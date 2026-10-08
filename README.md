@@ -1,6 +1,25 @@
-# Aurel Sales Pro · standalone UK hospitality outreach CRM
+# Aurel Group · Sales Pro | Commercial Growth Intelligence
 
-**Status: deployment-ready source package, NOT a deployed live system.** No prospect data has been imported, no email has been sent, and no Aurel Supabase project has yet been provisioned. Do not publish a working URL until the deployment checklist has passed.
+**Aurel Group / Aurel Intelligence** is a business growth and transformation consultancy. We identify hidden commercial value, build an evidence-led financial case, and deliver improvements that **increase revenue, reduce unnecessary operating costs and give people time back**. Technology and AI are tools to achieve those outcomes—not the consultancy's product or identity.
+
+**Brand position:** AI Consulting | Business Streamlined  
+**Brand phrase:** Automate. Accelerate. Intelligent Growth.  
+**Commercial message:** Increase revenue. Reduce operating costs. Give your people time back.  
+**Website:** https://aurelgroup.ai
+
+**What this repository contains:** Aurel Sales Pro, the separate *internal business-development system* supporting the consultancy. Its prospecting, evidence, approvals, CRM, replies, To-Dos and audit-to-contract pipeline do not define Aurel's service offering. It is intended for multiple industries; **UK hospitality groups are the initial discovery campaign**, not a permanent sector restriction.
+
+## Commercial delivery model
+
+1. **Paid opportunity and systems audits** — investigate revenue leakage, growth potential, inefficient processes and realistic financial returns.
+2. **Paid pilots** — demonstrate measurable business benefits in a controlled implementation.
+3. **Implementation programmes** — deliver agreed improvements in systems, operations, reporting and revenue performance.
+4. **Recurring consultancy and optimisation** — maintain, monitor, improve and identify new opportunities.
+
+All prospect hypotheses require sourced evidence and human assessment. Do not imply unverified customer results, guaranteed savings or a deployed production system.
+
+
+**Status: source-code MVP, NOT a deployed or production-verified live system.** No prospect data has been imported, no email has been sent, and no Aurel Supabase project has yet been provisioned. Do not publish a working URL until the deployment checklist has passed.
 
 This is deliberately a **separate database and codebase** from LandBank and Rebase. The application is mobile friendly, server-backed, and contains **no demo records or fake KPI data**.
 
@@ -19,14 +38,14 @@ This is deliberately a **separate database and codebase** from LandBank and Reba
 
 - This build does **not** generate 15 guaranteed qualified email contacts per day. It searches Companies House for up to 15 **unique eligible businesses**; real decision-makers and verified email evidence must be separately researched. Source-specific research/quality beats unsafe guessing.
 - Only one manually approved message may be sent by explicit action; **outbound remains disabled by default** until Gmail is connected and sending enabled by a director.
-- No live Cloudflare project, repository or Supabase instance has been created through this package. Existing Rebase and LandBank production infrastructure was NOT changed.
+- This private GitHub repository has been created (`samtuppen6-sketch/aurelgroup`); Cloudflare and Supabase production deployments have not been verified. Existing Rebase and LandBank production infrastructure was NOT changed.
 - Hotel group initial focus. Extend SIC and discovery sources only after reviewing resulting quality; never auto-claim company revenue, transformation ROI or current system software without evidence.
 - The Companies House API is UK-only and many registered hotel entities are management/operating companies or have similar names. Human qualification is mandatory.
 - This is a functional MVP and still requires a pre-launch security review, privacy notice, send-volume/rate limiting verification and end-to-end OAuth testing before production use.
 
 ## Provision and deploy
 
-**1. Separate GitHub repository**: Create a private repository `aurel-sales-pro` under the correct account/organisation, then upload these files. Do not commit them into `rebase-ops-hub` or `land-bank`. Repo creation is not supported by the GitHub connector currently available to this assistant.
+**1. Private GitHub repository**: Source is maintained in `samtuppen6-sketch/aurelgroup`. Keep this repository private and entirely separate from LandBank and Rebase. Preserve all directories (`public/`, `supabase/`, `.github/workflows/`, `tests/`).
 
 **2. Separate Supabase project**: Create a new project named `aurel-sales-pro`, UK region (`eu-west-2`) in the **organisation you explicitly choose**, after Supabase cost confirmation. Do not apply this migration to an existing project. In the new project, run `supabase/migrations/20261008_aurel_sales_pro.sql`. Check all `public.aurel_*` RLS policies are active before any external access.
 
