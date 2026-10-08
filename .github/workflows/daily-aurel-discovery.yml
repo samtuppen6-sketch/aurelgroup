@@ -17,7 +17,10 @@ jobs:
           AUREL_JOB_KEY: ${{ secrets.AUREL_JOB_KEY }}
         run: |
           set -euo pipefail
-          test -n "$FUNCTIONS_URL" && test -n "$AUREL_JOB_KEY"
+          if [[ -z "$FUNCTIONS_URL" || -z "$AUREL_JOB_KEY" ]]; then
+            echo "Aurel integration not yet configured; safely skipping scheduled job."
+            exit 0
+          fi
           curl --fail-with-body --retry 2 --max-time 120 -X POST "$FUNCTIONS_URL/aurel-discover" \
             -H "Content-Type: application/json" -H "x-aurel-job-key: $AUREL_JOB_KEY" -d '{}'
       - name: Sync Aurel inbox replies
@@ -26,6 +29,9 @@ jobs:
           AUREL_JOB_KEY: ${{ secrets.AUREL_JOB_KEY }}
         run: |
           set -euo pipefail
-          test -n "$FUNCTIONS_URL" && test -n "$AUREL_JOB_KEY"
+          if [[ -z "$FUNCTIONS_URL" || -z "$AUREL_JOB_KEY" ]]; then
+            echo "Aurel integration not yet configured; safely skipping scheduled job."
+            exit 0
+          fi
           curl --fail-with-body --retry 2 --max-time 120 -X POST "$FUNCTIONS_URL/aurel-replies" \
             -H "Content-Type: application/json" -H "x-aurel-job-key: $AUREL_JOB_KEY" -d '{}'
