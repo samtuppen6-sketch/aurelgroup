@@ -30,7 +30,7 @@ create table public.aurel_companies (
  company_number text unique,
  company_type text not null default 'unknown' check (company_type in ('limited','llp','sole_trader','partnership','unknown')),
  website text,
- sector text not null default 'hospitality',
+ sector text not null default 'unclassified',
  location text,
  source text,
  source_url text,
