@@ -1,0 +1,31 @@
+name: Aurel weekday lead discovery & reply sync
+on:
+  schedule:
+    - cron: '30 7 * * 1-5'   # 07:30 UTC; 08:30 British Summer Time
+    - cron: '0 13 * * 1-5'   # 13:00 UTC reply sync (functions themselves are idempotent)
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run verified Companies House discovery
+        if: github.event.schedule == '30 7 * * 1-5' || github.event_name == 'workflow_dispatch'
+        env:
+          FUNCTIONS_URL: ${{ secrets.AUREL_SUPABASE_FUNCTIONS_URL }}
+          AUREL_JOB_KEY: ${{ secrets.AUREL_JOB_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$FUNCTIONS_URL" && test -n "$AUREL_JOB_KEY"
+          curl --fail-with-body --retry 2 --max-time 120 -X POST "$FUNCTIONS_URL/aurel-discover" \
+            -H "Content-Type: application/json" -H "x-aurel-job-key: $AUREL_JOB_KEY" -d '{}'
+      - name: Sync Aurel inbox replies
+        env:
+          FUNCTIONS_URL: ${{ secrets.AUREL_SUPABASE_FUNCTIONS_URL }}
+          AUREL_JOB_KEY: ${{ secrets.AUREL_JOB_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$FUNCTIONS_URL" && test -n "$AUREL_JOB_KEY"
+          curl --fail-with-body --retry 2 --max-time 120 -X POST "$FUNCTIONS_URL/aurel-replies" \
+            -H "Content-Type: application/json" -H "x-aurel-job-key: $AUREL_JOB_KEY" -d '{}'
