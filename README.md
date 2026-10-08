@@ -19,7 +19,7 @@
 All prospect hypotheses require sourced evidence and human assessment. Do not imply unverified customer results, guaranteed savings or a deployed production system.
 
 
-**Status: source-code MVP, NOT a deployed or production-verified live system.** No prospect data has been imported, no email has been sent, and no Aurel Supabase project has yet been provisioned. Do not publish a working URL until the deployment checklist has passed.
+**Status: source-code MVP, NOT a deployed or production-verified live system.** A separate Aurel Supabase project, initial schema and four Edge Functions now exist. No prospect data has been imported, no email has been sent, and Cloudflare hosting, login and integrations have not yet been verified. Do not publish a working URL until the deployment checklist has passed.
 
 This is deliberately a **separate database and codebase** from LandBank and Rebase. The application is mobile friendly, server-backed, and contains **no demo records or fake KPI data**.
 
@@ -38,7 +38,7 @@ This is deliberately a **separate database and codebase** from LandBank and Reba
 
 - This build does **not** generate 15 guaranteed qualified email contacts per day. It searches Companies House for up to 15 **unique eligible businesses**; real decision-makers and verified email evidence must be separately researched. Source-specific research/quality beats unsafe guessing.
 - Only one manually approved message may be sent by explicit action; **outbound remains disabled by default** until Gmail is connected and sending enabled by a director.
-- This private GitHub repository has been created (`samtuppen6-sketch/aurelgroup`); Cloudflare and Supabase production deployments have not been verified. Existing Rebase and LandBank production infrastructure was NOT changed.
+- The private GitHub repository is ready and a dedicated London Supabase backend has been provisioned. Cloudflare hosting, Gmail and actual logged-in access are not yet verified. Existing Rebase and LandBank production infrastructure was NOT changed.
 - Hotel group initial focus. Extend SIC and discovery sources only after reviewing resulting quality; never auto-claim company revenue, transformation ROI or current system software without evidence.
 - The Companies House API is UK-only and many registered hotel entities are management/operating companies or have similar names. Human qualification is mandatory.
 - This is a functional MVP and still requires a pre-launch security review, privacy notice, send-volume/rate limiting verification and end-to-end OAuth testing before production use.
@@ -47,7 +47,7 @@ This is deliberately a **separate database and codebase** from LandBank and Reba
 
 **1. Private GitHub repository**: Source is maintained in `samtuppen6-sketch/aurelgroup`. Keep this repository private and entirely separate from LandBank and Rebase. Preserve all directories (`public/`, `supabase/`, `.github/workflows/`, `tests/`).
 
-**2. Separate Supabase project**: Create a new project named `aurel-sales-pro`, UK region (`eu-west-2`) in the **organisation you explicitly choose**, after Supabase cost confirmation. Do not apply this migration to an existing project. In the new project, run `supabase/migrations/20261008_aurel_sales_pro.sql`. Check all `public.aurel_*` RLS policies are active before any external access.
+**2. Supabase project — created**: Dedicated Aurel project `kfgjlupwiirmaoatgeid` in London (`eu-west-2`). Migrations `20261008141223_aurel_sales_pro_initial.sql` and `20261008141435_aurel_security_hardening.sql` have been applied. All 12 Aurel business tables have RLS enabled. Do not re-run these migrations manually or apply them to existing other companies' databases; negative-access and end-to-end login tests remain pending.
 
 **3. First director membership**: Sign up by magic link from the app, then, as a project administrator in SQL Editor, grant access only to the resulting verified Auth user's ID:
 
@@ -82,7 +82,7 @@ AUREL_GMAIL_REFRESH_TOKEN=...                # OAuth token with correct Gmail re
 
 The runtime automatically provisions `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Never put the listed values in GitHub source files or Cloudflare public `config.js`.
 
-**6. Cloudflare Pages**: Create a NEW Pages project for Aurel. Publish directory `public/` with no build step (or GitHub integration with build output `public`). Copy `public/config.example.js` to `public/config.js` and configure the project URL plus **publishable anon key**. Both are safe for browser use provided RLS stays enforced; service-role credentials are never safe to publish. Configure an Aurel-owned hostname such as `sales.aurelgroup.ai` only after adding the relevant DNS record.
+**6. Cloudflare Pages — pending**: Create a NEW Pages project using private GitHub repository `samtuppen6-sketch/aurelgroup` and production branch `main`. Framework preset: None. Build command: none (leave blank). Root directory: `/`; output directory: `public`. The tracked `public/config.js` already contains this project's URL and safe browser **publishable** key. Never place service-role credentials or OAuth tokens in `public/`. Set custom hostname such as `sales.aurelgroup.ai` only when DNS and Supabase Auth redirects are configured.
 
 **7. GitHub Actions scheduled sync**: Add repository secrets `AUREL_SUPABASE_FUNCTIONS_URL=https://PROJECT_REF.supabase.co/functions/v1` and the same `AUREL_JOB_KEY`. Enable GitHub Actions. Then switch on discovery in Aurel Sales Pro Settings only after Companies House credentials are configured. The schedule is UTC (07:30 UK winter / 08:30 British Summer Time), Monday–Friday. The worker prevents a second import for the same UK date. Manual runs are allowed and do not send emails. Reply sync can also be triggered from the UI.
 
@@ -90,8 +90,10 @@ The runtime automatically provisions `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_K
 
 ## Release gate (must pass before claiming live)
 
-- [ ] Separate Supabase project, migration success, RLS on every table, auth membership and negative-access test.
-- [ ] Separate private repository and Cloudflare Pages project, private-to-live config done.
+- [x] Dedicated Supabase project, schema migrations installed, and RLS enabled for all 12 tables.
+- [ ] Auth membership, real login and negative-access test.
+- [x] Separate private GitHub repository; browser publishable-key configuration.
+- [ ] Cloudflare Pages project, live login redirects and private-to-live smoke tests.
 - [ ] Companies House source key test; real researched UK hospitality leads appear and deduplicate.
 - [ ] Aurel-only Gmail OAuth identity test; never use LandBank or Rebase inbox credentials.
 - [ ] Approved-test-email send, provider-message receipt, inbound reply creation and one linked To-Do task.
